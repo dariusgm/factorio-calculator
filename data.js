@@ -147,28 +147,43 @@ $( document ).ready( function() {
     "Greifarm": 1
   };
 
+  data.Kupferkabel = {
+    "Kupferplatte": 2
+  }
+
   $("#singlebutton").click(function(event) {
     event.preventDefault()
     var auswahl = $("#selectbasic").val();
     var daten = window.data[auswahl]
-    var level = 1;
+    var level = 10;
     var result = {};
     for (var i = 0; i < level; i++) {
-       var internal = Object.getOwnPropertyNames(daten)
-       for (var c = 0; c < internal.length; c++ ) {
-         var key = window.data[internal[c]]
-         if (key) {
-           if (result[key]) {
-             console.log("Existing Key: " + key)
-           } else {
-              console.log("New Key: " + key)  
-           }
-         }
-         else { console.log("Skipped Key: " + key) }
-       }
+      if (daten != undefined) {
+        var internal = Object.getOwnPropertyNames(daten)
+        for (var c = 0; c < internal.length; c++ ) {
+          var obj = window.data[internal[c]]
+          if (obj) {
+            if (result[obj]) {
+              console.log("Existing obj: " + JSON.stringify(obj))
+            } else {
+              // console.log("New obj: " + JSON.stringify(obj));
+             for(elem in obj) {
+               if (result[elem]) {
+                 result[elem] = obj[elem] + result[elem]
+                 console.log("Merging obj: " + JSON.stringify(obj));
+               } else {
+                   result[elem] = obj[elem]
+                   console.log("Pushing obj: " + JSON.stringify(obj));
+               }
+             }
+            }
+          }
+          else { console.log("Skipped obj: " + internal[c]) }
+        }
+        daten = result;
+     }
+     console.log(JSON.stringify(result))
     }
-
-
   });
 });
 
