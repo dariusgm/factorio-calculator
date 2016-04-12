@@ -1,6 +1,6 @@
 'use strict';
 
-var rootNodes = ["Eisenerz", "Kupfererz", "Schwefelsäure"];
+var rootNodes = ["Eisenerz", "Kupfererz", "Schwefelsäure", "Wasser"];
 var onlyRoot = function(obj) {
   var keys = allKeys(obj);
   if (keys.length > rootNodes.length) { return false }
@@ -44,6 +44,10 @@ var getSubElements = function(obj) {
   return window.data[keys[0]];
 };
 
+var append = function(obj) {
+  var text = $("#textinput2").val();
+  $("#textinput2").val(text + s(obj) + "\n")
+};
 
 
 var reduce = function(obj) {
@@ -60,18 +64,17 @@ var reduce = function(obj) {
       for (var o = 0; o < subelementskeys.length; o++) {
         var currentSubelementKey = subelementskeys[o];
         var currentSubelementValue = subelements[currentSubelementKey];
-        // If subelements there
         if (result[currentSubelementKey]) {
-          // Update new count
           var oldValue =  result[currentSubelementKey];
           var ValueElem = currentSubelementValue;
-          var multiplay = windows.data[currentKey][currentSubelementKey]
-          var newValue = oldValueAll + (ValueElem * multiplay)
+          var newValue = oldValueAll + (ValueElem * multiplay);
           result[akeys[i]] = newValue;
         }
         else {
             result[currentSubelementKey] = currentSubelementValue;
-            delete obj[currentKey];
+            if (result[currentSubelementKey]) {
+              delete obj[currentKey];
+            }
         }
       }
     }
@@ -80,7 +83,7 @@ var reduce = function(obj) {
 
   var leftKeys = allKeys(obj);
   for (var i = 0; i < leftKeys.length; i++) {
-    var currentKey = akeys[i];
+    var currentKey = leftKeys[i];
     var currentValue =  obj[currentKey];
     // Add everything that is left
     if (! result[currentKey]) {
@@ -145,8 +148,8 @@ var mergeElements = function(elem, all) {
 };
 
 var s = function(obj) {
-   JSON.stringify(obj);
-}
+   return JSON.stringify(obj);
+};
 
 var traverse = function(selection, number) {
   var d = window.data[selection]
@@ -154,21 +157,18 @@ var traverse = function(selection, number) {
   var result = {};
   var currentLevel = 0;
   while(onlyRoot(d) == false && currentLevel < 10) {
-    d = mergeElements(d, {})
-    console.log(s(d));
+    append(d);
+    d = reduce(d);
     currentLevel++;
   }
-};
-
-
-var test = function() {
-  s(reduce({"Kupferplatte": 1}))
 };
 
 $( document ).ready( function() {
   window.data = {};
 
   data.Schwefelsäure = {};
+
+  data.Wasser = {};
 
   data.Eisenplatte = {"Eisenerz": 1};
 
@@ -190,6 +190,11 @@ $( document ).ready( function() {
     "Baumaterial mit geringer Dichte": 10,
     "Raketensteuergerät": 10,
     "Raketentreibstoff": 10
+  };
+
+  data.Beton = {
+    "Wasser": 1,
+    "Eisenerz": 1
   };
 
   data.Raketensilo = {
@@ -318,7 +323,7 @@ $( document ).ready( function() {
   data.Kupferkabel = {
     "Kupferplatte": 2
   }
-
+    $("#textinput2").val("");
   $("#singlebutton").click(function(event) {
     event.preventDefault();
     var selection = $("#selectbasic").val();
