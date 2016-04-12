@@ -1,6 +1,174 @@
+'use strict';
+
+var rootNodes = ["Eisenerz", "Kupfererz", "Schwefelsäure"];
+var onlyRoot = function(obj) {
+  var keys = allKeys(obj);
+  if (keys.length > rootNodes.length) { return false }
+  for (var c = 0; c < keys.length; c++ ) {
+    if (! rootNodes.includes(keys[c])) { return false }
+  }
+  return true;
+}
+
+var extractAll = function() {
+  var result = [];
+
+  var all = (allKeys(window.data));
+  for (var i = 0, len = all.length; i < len; i++) {
+    if (! result.includes(all[i])) {
+      result.push(all[i])
+      var internal = allKeys(window.data[all[i]])
+
+      for (var c = 0, lengt = internal.length; c < lengt; c++) {
+        if (! result.includes(internal[c])) {
+          result.push(internal[c])
+        }
+      }
+    }
+  }
+  var sorted = result.sort();
+  window.sorted = sorted;
+  var dropdown = $("#selectbasic");
+  for (var i = 0, len = sorted.length; i < len; i++) {
+    dropdown.append("<option value='" + sorted[i] + "'>" + sorted[i] +"</option>")
+  }
+};
+
+
+var allKeys = function(obj) {
+  return Object.getOwnPropertyNames(obj);
+};
+
+var getSubElements = function(obj) {
+  var keys = allKeys(obj);
+  return window.data[keys[0]];
+};
+
+
+
+var reduce = function(obj) {
+  var akeys = allKeys(obj);
+  var result = {};
+  for (var i = 0; i < akeys.length; i++) {
+    var currentKey = akeys[i];
+    var currentValue =  obj[currentKey];
+
+    // Resolve Dependencies
+    var subelements = window.data[currentKey];
+    if (subelements !== undefined) {
+      var subelementskeys = allKeys(subelements)
+      for (var o = 0; o < subelementskeys.length; o++) {
+        var currentSubelementKey = subelementskeys[o];
+        var currentSubelementValue = subelements[currentSubelementKey];
+        // If subelements there
+        if (result[currentSubelementKey]) {
+          // Update new count
+          var oldValue =  result[currentSubelementKey];
+          var ValueElem = currentSubelementValue;
+          var multiplay = windows.data[currentKey][currentSubelementKey]
+          var newValue = oldValueAll + (ValueElem * multiplay)
+          result[akeys[i]] = newValue;
+        }
+        else {
+            result[currentSubelementKey] = currentSubelementValue;
+            delete obj[currentKey];
+        }
+      }
+    }
+  }
+
+
+  var leftKeys = allKeys(obj);
+  for (var i = 0; i < leftKeys.length; i++) {
+    var currentKey = akeys[i];
+    var currentValue =  obj[currentKey];
+    // Add everything that is left
+    if (! result[currentKey]) {
+        result[currentKey] = currentValue;
+    }
+  }
+
+  return result;
+};
+
+var mergeElements = function(elem, all) {
+  var akeys = allKeys(all);
+  var ekeys = allKeys(elem);
+  var result = {};
+
+  // Merge Subelement
+  for (var i = 0; i < akeys.length; i++) {
+    for (var o = 0; o < ekeys.length; o++) {
+      var subelements = getSubElements(elem);
+      if (subelements !== undefined && subelements.length > 0) {
+        var subelementskeys = allKeys(subelements);
+        for (var p = 0; p < subelementskeys.length; p++) {
+          if (akeys[i] == subelementskeys[p]) {
+            var oldValueAll =  all[akeys[i]];
+            console.log(oldValueAll);
+            var ValueElem = subelements[akeys[i]]
+            console.log(ValueElem);
+            var multiplay = elem[ekeys[o]];
+            var newValue = oldValueAll + (ValueElem * multiplay)
+            result[akeys[i]] = newValue;
+          }
+          else {
+            result[subelementskeys[o]] = subelements[subelementskeys[p]]
+          }
+        }
+      }
+    }
+  }
+
+  // Merge Existing Keys
+  for (var i = 0; i < akeys.length; i++) {
+    for (var o = 0; o < ekeys.length; o++) {
+      if (akeys[i] == ekeys[o]) {
+        var oldValueAll =  all[akeys[i]]; // 2
+        var ValueElem = elem[ekeys] // 1
+        var newValue = oldValueAll + ValueElem
+        result[akeys[i]] = newValue;
+      }
+    }
+  }
+
+  // Merge Missing Keys
+  for (var i = 0; i < akeys.length; i++) {
+    result[akeys[i]] = all[akeys[i]];
+  }
+
+  for (var o = 0; o < ekeys.length; o++) {
+    result[ekeys[o]] = elem[ekeys[o]];
+  }
+
+  return result;
+};
+
+var s = function(obj) {
+   JSON.stringify(obj);
+}
+
+var traverse = function(selection, number) {
+  var d = window.data[selection]
+  var level = 10;
+  var result = {};
+  var currentLevel = 0;
+  while(onlyRoot(d) == false && currentLevel < 10) {
+    d = mergeElements(d, {})
+    console.log(s(d));
+    currentLevel++;
+  }
+};
+
+
+var test = function() {
+  s(reduce({"Kupferplatte": 1}))
+};
+
 $( document ).ready( function() {
   window.data = {};
 
+  data.Schwefelsäure = {};
 
   data.Eisenplatte = {"Eisenerz": 1};
 
@@ -152,61 +320,13 @@ $( document ).ready( function() {
   }
 
   $("#singlebutton").click(function(event) {
-    event.preventDefault()
-    var auswahl = $("#selectbasic").val();
-    var daten = window.data[auswahl]
-    var level = 10;
-    var result = {};
-    for (var i = 0; i < level; i++) {
-      if (daten != undefined) {
-        var internal = Object.getOwnPropertyNames(daten)
-        for (var c = 0; c < internal.length; c++ ) {
-          var obj = window.data[internal[c]]
-          if (obj) {
-            if (result[obj]) {
-              console.log("Existing obj: " + JSON.stringify(obj))
-            } else {
-              // console.log("New obj: " + JSON.stringify(obj));
-             for(elem in obj) {
-               if (result[elem]) {
-                 result[elem] = obj[elem] + result[elem]
-                 console.log("Merging obj: " + JSON.stringify(obj));
-               } else {
-                   result[elem] = obj[elem]
-                   console.log("Pushing obj: " + JSON.stringify(obj));
-               }
-             }
-            }
-          }
-          else { console.log("Skipped obj: " + internal[c]) }
-        }
-        daten = result;
-     }
-     console.log(JSON.stringify(result))
-    }
+    event.preventDefault();
+    var selection = $("#selectbasic").val();
+    traverse(selection);
+
   });
 });
 
 $( document ).ready( function() {
-    var result = [];
-
-    var all = (Object.getOwnPropertyNames(window.data));
-    for (var i = 0, len = all.length; i < len; i++) {
-      if (! result.includes(all[i])) {
-        result.push(all[i])
-        var internal = Object.getOwnPropertyNames(window.data[all[i]])
-
-        for (var c = 0, lengt = internal.length; c < lengt; c++) {
-          if (! result.includes(internal[c])) {
-            result.push(internal[c])
-          }
-        }
-      }
-    }
-  var sorted = result.sort();
-  window.sorted = sorted;
-  var dropdown = $("#selectbasic");
-  for (var i = 0, len = sorted.length; i < len; i++) {
-    dropdown.append("<option value='" + sorted[i] + "'>" + sorted[i] +"</option>")
-  }
+  extractAll();
 });
