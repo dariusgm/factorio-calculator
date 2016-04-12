@@ -2,7 +2,9 @@
 
 var rootNodes = ["Eisenerz", "Kupfererz", "Schwefelsäure", "Wasser"];
 var onlyRoot = function(obj) {
+
   var keys = allKeys(obj);
+  if (keys.length == 0) { return true; }
   if (keys.length > rootNodes.length) { return false }
   for (var c = 0; c < keys.length; c++ ) {
     if (! rootNodes.includes(keys[c])) { return false }
@@ -67,7 +69,8 @@ var reduce = function(obj) {
         if (result[currentSubelementKey]) {
           var oldValue =  result[currentSubelementKey];
           var ValueElem = currentSubelementValue;
-          var newValue = oldValueAll + (ValueElem * multiplay);
+          var multiplay = window.data[currentKey][currentSubelementKey];
+          var newValue = oldValue + (ValueElem * multiplay);
           result[akeys[i]] = newValue;
         }
         else {
@@ -89,59 +92,6 @@ var reduce = function(obj) {
     if (! result[currentKey]) {
         result[currentKey] = currentValue;
     }
-  }
-
-  return result;
-};
-
-var mergeElements = function(elem, all) {
-  var akeys = allKeys(all);
-  var ekeys = allKeys(elem);
-  var result = {};
-
-  // Merge Subelement
-  for (var i = 0; i < akeys.length; i++) {
-    for (var o = 0; o < ekeys.length; o++) {
-      var subelements = getSubElements(elem);
-      if (subelements !== undefined && subelements.length > 0) {
-        var subelementskeys = allKeys(subelements);
-        for (var p = 0; p < subelementskeys.length; p++) {
-          if (akeys[i] == subelementskeys[p]) {
-            var oldValueAll =  all[akeys[i]];
-            console.log(oldValueAll);
-            var ValueElem = subelements[akeys[i]]
-            console.log(ValueElem);
-            var multiplay = elem[ekeys[o]];
-            var newValue = oldValueAll + (ValueElem * multiplay)
-            result[akeys[i]] = newValue;
-          }
-          else {
-            result[subelementskeys[o]] = subelements[subelementskeys[p]]
-          }
-        }
-      }
-    }
-  }
-
-  // Merge Existing Keys
-  for (var i = 0; i < akeys.length; i++) {
-    for (var o = 0; o < ekeys.length; o++) {
-      if (akeys[i] == ekeys[o]) {
-        var oldValueAll =  all[akeys[i]]; // 2
-        var ValueElem = elem[ekeys] // 1
-        var newValue = oldValueAll + ValueElem
-        result[akeys[i]] = newValue;
-      }
-    }
-  }
-
-  // Merge Missing Keys
-  for (var i = 0; i < akeys.length; i++) {
-    result[akeys[i]] = all[akeys[i]];
-  }
-
-  for (var o = 0; o < ekeys.length; o++) {
-    result[ekeys[o]] = elem[ekeys[o]];
   }
 
   return result;
@@ -213,6 +163,10 @@ $( document ).ready( function() {
     "Einfacher Akku": 100,
     "Radar": 5
   };
+
+  data["Einfacher Akku"] = {
+    "Eisenplatte": 1
+  }
 
   data.Raketensteuergerät = {
     "Prozessoreinheit": 1,
@@ -323,15 +277,17 @@ $( document ).ready( function() {
   data.Kupferkabel = {
     "Kupferplatte": 2
   }
-    $("#textinput2").val("");
-  $("#singlebutton").click(function(event) {
-    event.preventDefault();
-    var selection = $("#selectbasic").val();
-    traverse(selection);
-
-  });
 });
 
 $( document ).ready( function() {
   extractAll();
+});
+
+$( document ).ready( function() {
+  $("#singlebutton").click(function(event) {
+    event.preventDefault();
+    $("#textinput2").val("");
+    var selection = $("#selectbasic").val();
+    traverse(selection);
+  });
 });
