@@ -1,6 +1,6 @@
 'use strict';
 
-var rootNodes = ["Eisenerz", "Kupfererz", "Schwefelsäure", "Wasser"];
+var rootNodes = ["Eisenerz", "Kupfererz", "Wasser", "Stein", "Rohöl", "Alien-Artefakt", "Kohle", "Baumstämme"];
 var onlyRoot = function(obj) {
 
   var keys = allKeys(obj);
@@ -115,168 +115,100 @@ var traverse = function(selection, number) {
 
 $( document ).ready( function() {
   window.data = {};
-
-  data.Schwefelsäure = {};
-
-  data.Wasser = {};
-
+  data.Auto = {"Verbrennungsmotorenbestandteil": 8, "Eisenplatte": 20, "Stahlträger": 5};
+  data.Batterie = {"Eisenplatte": 1,"Kupferplatte": 1,"Schwefelsäure": 2};
+  data.Baumstämme = {};
+  data.Beton = {"Wasser": 10,"Eisenerz": 1, "Ziegelstein": 5};
+  data.Chemiefabrik = {"Stahlträger": 5, "Eisenzahnrad": 5, "Schaltkreis": 5, "Rohr": 5};
+  data.Dampfmaschine = {"Eisenzahnrad": 5, "Rohr": 5, "Eisenplatte": 5};
+  data.Eisenkiste = {"Eisenplatte": 8};
   data.Eisenplatte = {"Eisenerz": 1};
-
+  data.Eisenspitzhacke = {"Eisenstange": 2, "Eisenplatte": 3};
+  data.Eisenstange = {"Eisenstange": 0.5};
+  data.Eisenzahnrad = {"Eisenplatte": 2};
+  data.Elektromotorenbauteil = {"Schaltkreis": 2,"Verbrennungsmotorenbestandteil": 1,"Schmiermittel": 2};
+  data.Fließband = {"Eisenplatte": 1,"Eisenzahnrad": 1};
+  data.Geschützturm = {"Eisenzahnrad": 10, "Kupferplatte": 10, "Eisenplatte": 20};
+  data.Greifarm = {"Eisenplatte": 1,"Schaltkreis": 1,"Eisenzahnrad": 1};
+  data.Heizkessel = {"Schmelzofen": 1, "Rohr": 1};
+  data.Hochofen = {"Stahlträger":8, "Ziegelstein": 10};
+  data.Holzbohlen = {"Baumstämme": 1};
+  data.Holzkiste = {"Holzbohlen": 4};
+  data.Kohle = {};
+  data.Kunststoffstange = {"Kohle": 1, "Petroleum": 3};
+  data.Kupferkabel = {"Kupferplatte": 2}
   data.Kupferplatte = {"Kupfererz": 1};
-
+  data.Labor = {"Schaltkreis": 10, "Eisenzahnrad": 10, "Fließband": 4};
+  data.Lagertank = {"Eisenplatte": 20, "Stahlträger": 5};
+  data.Lampe = {"Schaltkreis": 1, "Eisenstange": 3, "Eisenplatte": 1};
+  data.Laserturm = {"Stahlträger": 20, "Schaltkreis": 20, "Batterie": 12};
+  data.Lichtbogenofen = {"Stahlträger": 15, "Erweiterter elektronischer Schaltkreis": 5, "Ziegelstein": 10};
+  data.Ölraffinierte = {"Stahlträger": 15, "Eisenzahnrad": 10, "Ziegelstein": 10, "Schaltkreis": 10, "Rohr": 10};
+  data.Petroleum = {"Rohöl": 1};
+  data.Pistole = {"Kupferplatte": 5, "Eisenplatte": 5};
+  data.Prozessoreinheit = {"Erweiterter Schaltkreis": 2,"Schaltkreis": 20,"Schwefelsäure": 0.5,"Eisenzahnrad": 1};
+  data.Radar = {"Eisenplatte": 10,"Schaltkreis": 5,"Eisenzahnrad": 5};
+  data.Rakete = {"Schaltkreis": 1, "Sprengstoff": 2, "Eisenplatte": 2};
+  data.Raketenbauteil = {"Baumaterial mit geringer Dichte": 10,"Raketensteuergerät": 10,"Raketentreibstoff": 10};
+  data.Raketensilo = {"Stahlträger": 1000,"Beton": 1000,"Rohr": 100,"Prozessoreinheit": 200,"Elektromotorenbauteil": 200};
+  data.Raketensteuergerät = {"Prozessoreinheit": 1,"Geschwindigkeitsmodul 1": 1,};
+  data.Raketentreibstoff = {"Festbrennstoff": 10};
+  data.Raketenwerfer = {"Eisenplatte": 5, "Eisenzahnrad": 5, "Schaltkreis": 5};
+  data.Reperaturkit = {"Schaltkreis": 1, "Eisenzahnrad": 1};
+  data.Rohöl = {};
+  data.Rohr = {"Eisenplatte": 1};
+  data.Satelit = {"Baumaterial mit geringer Dichte": 100,"Raketentreibstoff": 50,"Prozessoreinheit": 100,"Solarmodul": 100,"Einfacher Akku": 100,"Radar": 5};
+  data.Schaltkreis = {"Eisenplatte": 1,"Kupferkabel": 3};
+  data.Schmelzofen = {"Stein": 5};
+  data.Schmiermittel = {"Schweröl": 1};
+  data.Schwefel = {"Wasser": 3, "Petroleum": 3};
+  data.Schwefelsäure = {"Schwefel": 5, "Wasser": 10, "Eisenplatte": 1};
+  data.Schweröl = {"Rohöl": 1};
+  data.Sprengstoff = {"Schwefel": 1, "Kohle": 1, "Wasser": 1};
+  data.Stahlkiste = {"Stahlträger": 8};
+  data.Stahlspitzhacke = {"Stahlträger": 5, "Eisenstange": 2};
   data.Stahlträger = {"Eisenplatte": 5};
-
-  data["Baumaterial mit geringer Dichte"] = {
-    "Kupferplatte": 5,
-    "Stahlträger": 10,
-    "Kunststoffstange": 5
-  };
-
-  data.Kunststoffstange = {
-
-  };
-
-  data.Raketenbauteil = {
-    "Baumaterial mit geringer Dichte": 10,
-    "Raketensteuergerät": 10,
-    "Raketentreibstoff": 10
-  };
-
-  data.Beton = {
-    "Wasser": 1,
-    "Eisenerz": 1
-  };
-
-  data.Raketensilo = {
-    "Stahlträger": 1000,
-    "Beton": 1000,
-    "Rohr": 100,
-    "Prozessoreinheit": 200,
-    "Elektromotorenbestandteile": 200
-  };
-
-  data.Satelit = {
-    "Baumaterial mit geringer Dichte": 100,
-    "Raketentreibstoff": 50,
-    "Prozessoreinheit": 100,
-    "Solarmodul": 100,
-    "Einfacher Akku": 100,
-    "Radar": 5
-  };
-
-  data["Einfacher Akku"] = {
-    "Eisenplatte": 1
-  }
-
-  data.Raketensteuergerät = {
-    "Prozessoreinheit": 1,
-    "Geschwindigkeitsmodul 1": 1,
-  };
-
-  data.Raketentreibstoff = {
-    "Festbrennstoff": 10
-  };
-
-  data.Rohr = {
-    "Eisenplatte": 1
-  };
-
-  data["Geschwindigkeitsmodul 1"] = {
-    "Erweiterter Schaltkreis": 5,
-    "Schaltkreis": 5
-  };
-
-  data.Schaltkreis = {
-    "Eisenplatte": 1,
-    "Kupferkabel": 3
-  };
-
-  data["Erweiterter Schaltkreis"] = {
-    "Kunststoffstange": 2,
-    "Schaltkreis": 2,
-    "Kupferkabel": 4
-  };
-
-  data.Prozessoreinheit = {
-    "Erweiterter Schaltkreis": 2,
-    "Schaltkreis": 20,
-    "Schwefelsäure": 0.5,
-    "Eisenzahnrad": 1
-  };
-
-  data.Verbrennungsmotorenbestandteil = {
-    "Stahlträger": 1,
-    "Rohr": 2
-  };
-
-  data.Eisenzahnrad = {
-    "Eisenplatte": 2
-  };
-
-  data.Elektromotorenbestandteile = {
-    "Schaltkreis": 2,
-    "Verbrennungsmotorenbestandteil": 1,
-    "Schmiermittel": 2
-  };
-
-  data.Batterie = {
-    "Eisenplatte": 1,
-    "Kupferplatte": 1,
-    "Schwefelsäure": 2
-  };
-
-  data.Radar = {
-    "Eisenplatte": 10,
-    "Schaltkreis": 5,
-    "Eisenzahnrad": 5
-  };
-
-  data.Rot = {
-    "Kupferplatte": 1,
-    "Eisenzahnrad": 1
-  };
-
-  data.Grün = {
-    "Greifarm": 1,
-    "Fließband": 1
-  };
-
-  data.Greifarm = {
-    "Eisenplatte": 1,
-    "Schaltkreis": 1,
-    "Eisenzahnrad": 1
-  };
-
-  data.Fließband = {
-    "Eisenplatte": 1,
-    "Eisenzahnrad": 1
-  };
-
-  data.Stahlträger = {
-    "Eisenplatte": 5
-  };
-
-  data.Blau = {
-    "Stahlträger": 1,
-    "Erweiterter Schaltkreis": 1,
-    "Batterie": 1,
-    "Intelliger Greifarm": 1
-  };
-
-  data["Intelliger Greifarm"] = {
-    "Schaltkreis": 4,
-    "Schneller Greifarm": 1
-  };
-
-  data["Schneller Greifarm"] = {
-    "Eisenplatte": 2,
-    "Schaltkreis": 2,
-    "Greifarm": 1
-  };
-
-  data.Kupferkabel = {
-    "Kupferplatte": 2
-  }
+  data.Stahlträger = {"Eisenplatte": 5};
+  data.Stein = {};
+  data.Umspannwerk = {"Stahlträger": 10, "Erweiterter elektronischer Schaltkreis": 5, "Kupferplatte": 5};
+  data.Verbrennungsmotorenbestandteil = {"Stahlträger": 1,"Rohr": 2, "Eisenzahnrad": 1};
+  data.Wasser = {};
+  data.Ziegelstein = {"Stein": 2};
+  data["Alien-Wissenschaftspaket"] = {"Alien-Artefakt": 0.1};
+  data["Baumaterial mit geringer Dichte"] = {"Kupferplatte": 5, "Stahlträger": 10, "Kunststoffstange": 5};
+  data["Befeuerter Erzförderer"] = {"Eisenzahnrad": 3, "Schmelzofen": 1, "Eisenplatte": 3};
+  data["Befeuerter Greifarm"]= {"Eisenplatte": 1, "Eisenzahnrad": 1};
+  data["Einfacher Akku"] = {"Eisenplatte": 2, "Batterie": 5};
+  data["Elektrischer Erzbeförderer"] = {"Schaltkreis": 3, "Eisenzahnrad": 5, "Eisenplatte": 10};
+  data["Erweiterter Schaltkreis"] = {"Kunststoffstange": 2,"Schaltkreis": 2,"Kupferkabel": 4};
+  data["Geschwindigkeitsmodul 1"] = {"Erweiterter Schaltkreis": 5,"Schaltkreis": 5};
+  data["Geschwindigkeitsmodul 2"] = {"Geschwindigkeitsmodul 1": 4, "Prozessoreinheit": 5, "Erweiterter elektronischer Schaltkreis": 5};
+  data["Geschwindigkeitsmodul 3"] = {"Geschwindigkeitsmodul 2": 2, "Erweiterter elektronischer Schaltkreis": 5, "Prozessoreinheit": 5, "Alien-Artefakt": 1};
+  data["Großer Strommast"] = {"Stahlträger": 5, "Kupferplatte": 5};
+  data["Intelliger Greifarm"] = {"Schaltkreis": 4,"Schneller Greifarm": 1};
+  data["Kleine Pumpe"] = {"Elektromotorenbauteil": 1, "Stahlträger": 1, "Rohr": 1};
+  data["Kleiner Strommast"] = {"Holzbohlen": 1, "Kupferkabel": 1};
+  data["Leeres Fass"] = {"Stahlträger": 1};
+  data["Mittelgroßer Strommast"] = {"Stahlräger": 1, "Kupferplatte": 1};
+  data["Montagemaschine 1"] = {"Schaltkreis":3, "Eisenzahnrad": 5, "Eisenplatte": 9};
+  data["Montagemaschine 2"] = {"Eisenplatte": 9, "Schaltkreis": 3, "Eisenzahnrad": 5, "Montagemaschine 1": 1};
+  data["Montagemaschine 3"] = {"Geschwindigkeitsmodul 1": 4, "Montagemaschine 2": 2};
+  data["Normale Munition"] = {"Eisenplatte" :2};
+  data["Offshore-Pumpe"] = {"Schaltkreis": 2, "Rohr": 1, "Eisenzahnrad": 1};
+  data["Produktivitätsmodul 1"] = {"Erweiterter elektronischer Schaltkreis": 5, "Schaltkreis": 5};
+  data["Produktivitätsmodul 2"] = {"Produktivitätsmodul 1": 4, "Erweiterter elektronischer Schaltkreis": 5, "Prozessoreinheit": 5};
+  data["Produktivitätsmodul 3"] = {"Produktivitätsmodul 2": 5, "Erweiterter elektronischer Schaltkreis": 5, "Prozessoreinheit": 5, "Alien-Artefakt": 1};
+  data["Rohöl-Förderpumpe"] = {"Stahlträger": 15, "Eisenzahnrad": 10, "Schaltkreis": 10, "Rohr": 10};
+  data["Schneller Greifarm"] = {"Eisenplatte": 2,"Schaltkreis": 2,"Greifarm": 1};
+  data["Schnelles Fließband"] = {"Eisenzahnrad": 5, "Fließband": 1};
+  data["Schnelles Teilerfließband"] = {"Teilerfließband": 1, "Eisenzahnrad": 10, "Schaltkreis": 10};
+  data["Schnelles unterirdisches Fließband"] = {"Eisenzahnrad": 20, "Unterirdisches Fließband": 2};
+  data["Teilerfließband"] = {"Schaltkreis": 5, "Eisenplatte": 5, "Fließband": 4};
+  data["Unterirdisches Fließband"] = {"Eisenplatte": 5, "Fließband": 2.5};
+  data["Unterirdisches Rohr"] = {"Rohr": 10, "Eisenplatte": 5};
+  data["Wissenschaftspaket 1"] = {"Kupferplatte": 1,"Eisenzahnrad": 1};
+  data["Wissenschaftspaket 2"] = {"Greifarm": 1,"Fließband": 1};
+  data["Wissenschaftspaket 3"] = {"Stahlträger": 1,"Erweiterter Schaltkreis": 1,"Batterie": 1,"Intelliger Greifarm": 1};
 });
 
 $( document ).ready( function() {
