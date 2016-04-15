@@ -3,11 +3,12 @@
 var rootNodes = ["Eisenerz", "Kupfererz", "Wasser", "Stein", "Rohöl", "Alien-Artefakt", "Kohle", "Baumstämme"];
 var onlyRoot = function(obj) {
 
+  if (obj == undefined) { return true; }
   var keys = allKeys(obj);
   if (keys.length == 0) { return true; }
-  if (keys.length > rootNodes.length) { return false }
+  if (keys.length > rootNodes.length) { return false; }
   for (var c = 0; c < keys.length; c++ ) {
-    if (! rootNodes.includes(keys[c])) { return false }
+    if (! rootNodes.includes(keys[c])) { return false; }
   }
   return true;
 }
@@ -59,6 +60,7 @@ var reduce = function(obj) {
     var currentKey = akeys[i];
     var currentValue =  obj[currentKey];
 
+
     // Resolve Dependencies
     var subelements = window.data[currentKey];
     if (subelements !== undefined) {
@@ -70,14 +72,17 @@ var reduce = function(obj) {
           var oldValue =  result[currentSubelementKey];
           var ValueElem = currentSubelementValue;
           var multiplay = window.data[currentKey][currentSubelementKey];
-          var newValue = oldValue + (ValueElem * multiplay);
+          var newValue = (oldValue + (ValueElem * multiplay));
           result[akeys[i]] = newValue;
         }
-        else {
-            result[currentSubelementKey] = currentSubelementValue;
-            if (result[currentSubelementKey]) {
-              delete obj[currentKey];
-            }
+        else if (obj[currentSubelementKey]) {
+          var old = obj[currentSubelementKey];
+          var multiplay = obj[currentKey];
+          result[currentSubelementKey] = currentSubelementValue + (old * multiplay);
+        } else {
+          if (! rootNodes.includes(currentKey)) {
+            delete obj[currentKey];
+          }
         }
       }
     }
@@ -122,6 +127,7 @@ $( document ).ready( function() {
   data.Chemiefabrik = {"Stahlträger": 5, "Eisenzahnrad": 5, "Schaltkreis": 5, "Rohr": 5};
   data.Dampfmaschine = {"Eisenzahnrad": 5, "Rohr": 5, "Eisenplatte": 5};
   data.Eisenkiste = {"Eisenplatte": 8};
+  data.Eisenerz = {};
   data.Eisenplatte = {"Eisenerz": 1};
   data.Eisenspitzhacke = {"Eisenstange": 2, "Eisenplatte": 3};
   data.Eisenstange = {"Eisenstange": 0.5};
@@ -168,12 +174,12 @@ $( document ).ready( function() {
   data.Stahlkiste = {"Stahlträger": 8};
   data.Stahlspitzhacke = {"Stahlträger": 5, "Eisenstange": 2};
   data.Stahlträger = {"Eisenplatte": 5};
-  data.Stahlträger = {"Eisenplatte": 5};
   data.Stein = {};
   data.Umspannwerk = {"Stahlträger": 10, "Erweiterter elektronischer Schaltkreis": 5, "Kupferplatte": 5};
   data.Verbrennungsmotorenbestandteil = {"Stahlträger": 1,"Rohr": 2, "Eisenzahnrad": 1};
   data.Wasser = {};
   data.Ziegelstein = {"Stein": 2};
+  data["Alien-Artefakt"] = {};
   data["Alien-Wissenschaftspaket"] = {"Alien-Artefakt": 0.1};
   data["Baumaterial mit geringer Dichte"] = {"Kupferplatte": 5, "Stahlträger": 10, "Kunststoffstange": 5};
   data["Befeuerter Erzförderer"] = {"Eisenzahnrad": 3, "Schmelzofen": 1, "Eisenplatte": 3};
