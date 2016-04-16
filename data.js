@@ -68,6 +68,7 @@ var reduce = function(obj) {
       for (var o = 0; o < subelementskeys.length; o++) {
         var currentSubelementKey = subelementskeys[o];
         var currentSubelementValue = subelements[currentSubelementKey];
+        // In traget
         if (result[currentSubelementKey]) {
           var oldValue =  result[currentSubelementKey];
           var ValueElem = currentSubelementValue;
@@ -75,18 +76,26 @@ var reduce = function(obj) {
           var newValue = (oldValue + (ValueElem * multiplay));
           result[akeys[i]] = newValue;
         }
+        // In src
         else if (obj[currentSubelementKey]) {
           var old = obj[currentSubelementKey];
           var multiplay = obj[currentKey];
           result[currentSubelementKey] = currentSubelementValue + (old * multiplay);
-        } else {
-          if (! rootNodes.includes(currentKey)) {
-            delete obj[currentKey];
-          }
+        }
+        // not inside
+        else {
+          var multiplay = obj[currentKey];
+          result[currentSubelementKey] =  currentSubelementValue * multiplay;
         }
       }
     }
+
+    if (! rootNodes.includes(currentKey)) {
+      delete obj[currentKey];
+    }
   }
+
+  // Remove just processed element from obj if not root
 
 
   var leftKeys = allKeys(obj);
@@ -111,11 +120,12 @@ var traverse = function(selection, number) {
   var level = 10;
   var result = {};
   var currentLevel = 0;
-  while(onlyRoot(d) == false && currentLevel < 10) {
+  while(onlyRoot(d) != true) {
     append(d);
     d = reduce(d);
     currentLevel++;
   }
+  append(d); // Final Result
 };
 
 $( document ).ready( function() {
