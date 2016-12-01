@@ -26,7 +26,6 @@ var extractAll = function() {
     }
   }
   var sorted = result.sort();
-  window.sorted = sorted;
   var dropdown = $("#selectbasic");
   for (var i = 0, len = sorted.length; i < len; i++) {
     dropdown.append("<option value='" + sorted[i] + "'>" + sorted[i] +"</option>")
