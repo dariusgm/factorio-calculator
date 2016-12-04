@@ -1,0 +1,52 @@
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="data.js"></script>
+    <script src="application.js"></script>
+    <script src="factorio_v014.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+  <table>
+    <th>
+      <tr>
+        <td>Expected</td>
+        <td>Result</td>
+      </tr>
+    </th>
+    <tr>
+      <td>
+        {"Wasser": 10,"Eisenerz": 1, "Ziegelstein": 5}
+      </td>
+      <td>
+        <script>
+          var result1 = reduce({"Beton": 1})
+        document.write(s(result1));
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      {"Verbrennungsmotorenbestandteil": 8, "Eisenplatte": 20, "Stahlträger": 5}
+      </td>
+      <td>
+        <script>
+          var result1 = reduce({"Verbrennungsmotorenbestandteil": 8, "Eisenplatte": 20, "Stahlträger": 5})
+        document.write(s(result1));
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {"Wasser": 10,"Eisenerz": 1, "Stein": 10}
+      </td>
+      <td>
+        <script>
+          var result1 = reduce(reduce({"Beton": 1}))
+        document.write(s(result1));
+        </script>
+      </td>
+    </tr>
+  </table
+</body>
